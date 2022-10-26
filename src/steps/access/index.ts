@@ -32,7 +32,7 @@ export async function fetchProjects({
           organizationSlug,
           async (projectData) => {
             const projectEntity = await jobState.addEntity(
-              createSentryProjectEntity(projectData),
+              createSentryProjectEntity(organizationSlug, projectData),
             );
             await jobState.addRelationship(
               createSentryProjectRelationship(organization, projectEntity),

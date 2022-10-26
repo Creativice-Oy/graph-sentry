@@ -23,6 +23,7 @@
   - `org:read`
   - `project:read`
   - `team:read`
+  - `event:read`
 - You must have permission in JupiterOne to install new integrations.
 
 ## Support
@@ -36,7 +37,7 @@ If you need help with this integration, please contact
 
 [Sentry API Documentation](https://docs.sentry.io/api/auth/)
 
-[Generate am Auth Token](https://sentry.io/settings/account/api/auth-tokens/)
+[Generate an Auth Token](https://sentry.io/settings/account/api/auth-tokens/)
 
 1. Navigate to the Auth Tokens page in Sentry Settings.
 2. Select **Create New Token** in the top right corner.
@@ -94,6 +95,8 @@ The following entities are created:
 
 | Resources    | Entity `_type`        | Entity `_class` |
 | ------------ | --------------------- | --------------- |
+| Event        | `sentry_event`        | `Incident`      |
+| Issue        | `sentry_issue`        | `Problem`       |
 | Member       | `sentry_member`       | `User`          |
 | Organization | `sentry_organization` | `Account`       |
 | Project      | `sentry_project`      | `Project`       |
@@ -108,6 +111,8 @@ The following relationships are created:
 | `sentry_organization` | **HAS**               | `sentry_member`       |
 | `sentry_organization` | **HAS**               | `sentry_project`      |
 | `sentry_organization` | **HAS**               | `sentry_team`         |
+| `sentry_project`      | **HAS**               | `sentry_event`        |
+| `sentry_project`      | **HAS**               | `sentry_issue`        |
 | `sentry_team`         | **ASSIGNED**          | `sentry_project`      |
 | `sentry_team`         | **HAS**               | `sentry_member`       |
 

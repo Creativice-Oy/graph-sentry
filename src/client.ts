@@ -8,6 +8,8 @@ import {
   SentryTeam,
   SentryProject,
   SentryUser,
+  SentryProjectIssue,
+  SentryProjectEvent,
 } from './types';
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
@@ -118,6 +120,62 @@ export class APIClient {
 
       for (const project of projectResults) {
         await iteratee(project);
+      }
+    }
+  }
+
+  /**
+   * Iterates each project issue resource in the provider.
+   *
+   * @param orgSlug added to URL to specify correct Sentry organization
+   * @param projectSlug added to URL to specify correct Sentry project
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateProjectIssues(
+    orgSlug: string,
+    projectSlug: string,
+    iteratee: ResourceIteratee<SentryProjectIssue>,
+  ): Promise<void> {
+    const url = `${this.sentryBaseUrl}projects/${orgSlug}/${projectSlug}/issues/`;
+    let moreData = true;
+
+    while (moreData) {
+      const projectIssueResponse = await this.axiosInstance.get(url);
+      const projectIssueResults = projectIssueResponse.data;
+
+      const projectIssueHeaders = projectIssueResponse.headers;
+      moreData = Boolean(projectIssueHeaders.results); //results=true when more than 100 results are available
+
+      for (const projectIssue of projectIssueResults) {
+        await iteratee(projectIssue);
+      }
+    }
+  }
+
+  /**
+   * Iterates each project issue resource in the provider.
+   *
+   * @param orgSlug added to URL to specify correct Sentry organization
+   * @param projectSlug added to URL to specify correct Sentry project
+   * @param iteratee receives each resource to produce entities/relationships
+   */
+  public async iterateProjectEvents(
+    orgSlug: string,
+    projectSlug: string,
+    iteratee: ResourceIteratee<SentryProjectEvent>,
+  ): Promise<void> {
+    const url = `${this.sentryBaseUrl}projects/${orgSlug}/${projectSlug}/events/`;
+    let moreData = true;
+
+    while (moreData) {
+      const projectEventResponse = await this.axiosInstance.get(url);
+      const projectEventResults = projectEventResponse.data;
+
+      const projectEventHeaders = projectEventResponse.headers;
+      moreData = Boolean(projectEventHeaders.results); //results=true when more than 100 results are available
+
+      for (const projectEvent of projectEventResults) {
+        await iteratee(projectEvent);
       }
     }
   }

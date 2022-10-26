@@ -25,15 +25,33 @@ export function createSentryTeamEntity(team: SentryTeam) {
   });
 }
 
-export function createSentryProjectEntity(project: SentryProject) {
+export function createSentryProjectEntity(
+  organizationSlug: string,
+  project: SentryProject,
+) {
   return createIntegrationEntity({
     entityData: {
-      source: project,
+      source: { ...project, organizationSlug },
       assign: {
         _key: `sentry-project-${project.id}`,
         _type: Entities.PROJECT._type,
         _class: Entities.PROJECT._class,
+        id: project.id,
         name: project.name,
+        slug: project.slug,
+        isBookmarked: project.isBookmarked,
+        isMember: project.isMember,
+        hasAccess: project.hasAccess,
+        createdOn: parseTimePropertyValue(project.dateCreated),
+        eventProcessingSymbolicationDegraded:
+          project.eventProcessing.symbolicationDegraded,
+        features: project.features,
+        firstTransactionEvent: project.firstTransactionEvent,
+        hasSessions: project.hasSessions,
+        hasProfiles: project.hasProfiles,
+        platform: project.platform,
+        hasUserReports: project.hasUserReports,
+        organization: organizationSlug,
       },
     },
   });

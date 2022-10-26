@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- Added new entities `sentry_issue`, and `sentry_event`
+- Added new relationships `sentry_project_has_issue`, and
+  `sentry_project_has_event`
+
 ## 1.3.1 - 2022-07-08
 
 ### Fixed

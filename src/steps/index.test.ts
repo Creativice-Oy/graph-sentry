@@ -124,7 +124,7 @@ test('should collect data', async () => {
   expect(projects).toMatchGraphObjectSchema({
     _class: ['Project'],
     schema: {
-      additionalProperties: false,
+      additionalProperties: true,
       properties: {
         _type: { const: 'sentry_project' },
         name: { type: 'string' },

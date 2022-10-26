@@ -10,6 +10,13 @@ export { Recording };
 export function setupSentryRecording(options: SetupRecordingInput) {
   return setupRecording({
     ...options,
+    options: {
+      matchRequestsBy: {
+        url: {
+          pathname: false,
+        },
+      },
+    },
     mutateEntry: (entry) => {
       mutations.unzipGzippedRecordingEntry(entry);
 

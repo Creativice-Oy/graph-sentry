@@ -11,10 +11,12 @@ export const Steps = {
   PROJECTS: 'fetch-projects',
   USERS: 'fetch-members',
   USER_MEMBERSHIP: 'fetch-teams-members',
+  ISSUES: 'fetch-project-issues',
+  EVENTS: 'fetch-project-events',
 };
 
 export const Entities: Record<
-  'ORGANIZATION' | 'TEAM' | 'PROJECT' | 'MEMBER',
+  'ORGANIZATION' | 'TEAM' | 'PROJECT' | 'MEMBER' | 'ISSUE' | 'EVENT',
   StepEntityMetadata
 > = {
   ORGANIZATION: {
@@ -37,6 +39,16 @@ export const Entities: Record<
     _type: 'sentry_member',
     _class: ['User'],
   },
+  ISSUE: {
+    resourceName: 'Issue',
+    _type: 'sentry_issue',
+    _class: ['Problem'],
+  },
+  EVENT: {
+    resourceName: 'Event',
+    _type: 'sentry_event',
+    _class: ['Incident'],
+  },
 };
 
 export const Relationships: Record<
@@ -44,6 +56,8 @@ export const Relationships: Record<
   | 'ORGANIZATION_HAS_PROJECT'
   | 'ORGANIZATION_HAS_USER'
   | 'TEAM_ASSIGNED_PROJECT'
+  | 'PROJECT_HAS_ISSUE'
+  | 'PROJECT_HAS_EVENT'
   | 'TEAM_HAS_USER',
   StepRelationshipMetadata
 > = {
@@ -76,5 +90,17 @@ export const Relationships: Record<
     sourceType: Entities.TEAM._type,
     _class: RelationshipClass.HAS,
     targetType: Entities.MEMBER._type,
+  },
+  PROJECT_HAS_EVENT: {
+    _type: 'sentry_project_has_event',
+    sourceType: Entities.PROJECT._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.EVENT._type,
+  },
+  PROJECT_HAS_ISSUE: {
+    _type: 'sentry_project_has_issue',
+    sourceType: Entities.PROJECT._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.ISSUE._type,
   },
 };
